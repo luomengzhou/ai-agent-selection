@@ -9,7 +9,7 @@
 
 | 项 | 说明 |
 |---|---|
-| 标的 | 1 个 Mini 产品 |
+| 标的 | 单一股指期货产品 |
 | Agent 池 | 70 个（45 long / 25 short） |
 | 粒度 | 约每文件 154 万行、5 分钟 bar |
 | 原始列 | `timestamp`, `price`, `cum_ot_pnl` |
@@ -22,7 +22,7 @@
 
 ## 1. 问题映射：Manager / Agent Selection vs 价格预测
 
-本项目的核心任务更接近 **multi-manager / agent selection**（从候选池中挑组合构件），而不是对 Mini 价格做 next-bar 预测。
+本项目的核心任务更接近 **multi-manager / agent selection**（从候选池中挑组合构件），而不是对标的价格做 next-bar 预测。
 
 | 维度 | 价格预测（price / return forecasting） | Agent / Manager Selection（本项目） |
 |---|---|---|
@@ -34,7 +34,7 @@
 
 **要点**：
 
-1. **不要把问题做成「预测 Mini 下一根 bar」再间接挑 agent。** 更直接的是：对每条 agent PnL 路径做表征 → 排序 / 聚类 / 规则筛选 → 组合 fit。
+1. **不要把问题做成「预测标的下一根 bar」再间接挑 agent。** 更直接的是：对每条 agent PnL 路径做表征 → 排序 / 聚类 / 规则筛选 → 组合 fit。
 2. 业界 CTA 选管理人的常见陷阱（软因素、追逐近期冠军）在本项目同样适用：70 个 agent 的全样本排名极易过拟合；必须 **walk-forward** 与 **组合层面** 指标。
 3. 深度模型在文献中常出现在两条链上：（a）直接学仓位 / 组合权重；（b）先学 embedding 再做截面排序。对本课程阶段，**(b) + 手工特征表 + 用户规则** 更贴目标；端到端仓位网络属于后续可选。
 
@@ -58,7 +58,7 @@
 ### 2.3 Crisis alpha / 状态条件表现
 
 - 在「风险资产大跌 / 波动飙升」窗口内的条件收益，是 CTA 叙事核心之一（crisis alpha）。
-- 对本数据：可用 Mini `price` 的大幅下跌段、已实现波动分位数、或外部宏观/股指危机窗，计算各 agent 的 **条件累计 `bar_pnl`**。
+- 对本数据：可用标的 `price` 的大幅下跌段、已实现波动分位数、或外部宏观/股指危机窗，计算各 agent 的 **条件累计 `bar_pnl`**。
 - 文献与实务警告：危机表现不稳定，且 **事后定义危机窗口** 会引入 hindsight；应用扩展窗或预注册危机定义。
 
 ### 2.4 相关结构与组合 Fit
@@ -160,7 +160,7 @@ Wu et al.（*Management Science*）对冲基金截面预测：从历史收益构
 **局限**
 
 - RL 样本效率差、奖励 hacking、回测过拟合常见；
-- GCN 多关系假设（行业/板块邻接）在「同一 Mini 上的 70 agent」上需重定义（例如按相关图、long/short 边）；
+- GCN 多关系假设（行业/板块邻接）在「同一标的上的 70 agent」上需重定义（例如按相关图、long/short 边）；
 - 工程与调参成本高，不适合作为本阶段主路径；可作 comprehensive 对照实验。
 
 ### 3.5 金融目标直接优化（Sharpe / PnL / MDD Loss）
@@ -244,7 +244,7 @@ Khubiyev et al. 系统讨论：用 Sharpe、PnL、MDD 等 **finance-grounded los
 - 收益/风险：mean PnL、vol、Sharpe、Sortino、MDD、Calmar；
 - 形状：skew、kurt、水下时间；
 - 状态：高波动/下跌市条件 PnL；
-- Fit：与池内平均相关、与 Mini 收益相关；
+- Fit：与池内平均相关、与标的收益相关；
 - 活跃：活跃 bar 比例、平均活跃间隔。
 
 **验收**：一张可 join 的 panel 表 + 用 2–3 条示例规则（如「Sharpe>θ 且 max corr<ρ 且危机窗 PnL>0」）跑通 walk-forward。
@@ -318,7 +318,7 @@ Khubiyev et al. 系统讨论：用 Sharpe、PnL、MDD 等 **finance-grounded los
 
 ## 7. 一页纸结论（给后续 comprehensive）
 
-1. **问题是 agent selection / 组合 fit，不是 Mini 价格预测。**  
+1. **问题是 agent selection / 组合 fit，不是标的价格预测。**  
 2. **先做 EDA + 特征表 + walk-forward 规则**；DL embedding / 截面 DNN / Sharpe-loss / RL 按需后置。  
 3. **主指标不要只看全样本 Sharpe**；必须看相关结构、危机/高波动条件表现、活跃度口径与样本外衰减。  
 4. 文献最直接可迁移的是：**截面收益衍生特征 + ML（Wu et al.）** 与 **风险调整目标对齐（DMN/DIN / finance-grounded loss）**；端到端 RL（Cafe-GCN、DSCRL）作进阶对照即可。

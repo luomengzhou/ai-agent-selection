@@ -25,10 +25,10 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / "Mini_20261006_2158-120min-1130"
+DATA = ROOT / "data"
 OUT = ROOT / "outputs_eda_light" / "features"
 FNAME_RE = re.compile(
-    r"pnl_(?:Mini|Nasdaq)_\d+_\d+_([0-9A-Fa-f]+)_(long|short)\.parquet"
+    r"pnl_[^_]+_\d+_\d+_([0-9A-Fa-f]+)_(long|short)\.parquet"
 )
 
 
@@ -41,8 +41,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-dir", type=Path, default=DATA)
     ap.add_argument("--out-dir", type=Path, default=OUT)
-    ap.add_argument("--session-start", default="11:35")
-    ap.add_argument("--session-end", default="13:30")
+    ap.add_argument("--session-start", required=True, help="HH:MM inclusive (supplied by the data owner)")
+    ap.add_argument("--session-end", required=True, help="HH:MM inclusive (supplied by the data owner)")
     args = ap.parse_args()
     out: Path = args.out_dir
     figs, raw = out / "figs", out / "raw"

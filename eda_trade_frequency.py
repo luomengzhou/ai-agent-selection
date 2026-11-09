@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / "Mini_20261006_2158-120min-1130"
+DATA = ROOT / "data"
 OUT = ROOT / "outputs_eda_light" / "time"
 
 

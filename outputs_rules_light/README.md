@@ -9,9 +9,9 @@ Implements docs/agent_selection_rules_zh.md sections 1-4. Each year Y, features 
 - `summary.txt`: concatenated-path stats, yearly table, D parameters.
 - `figs/fig_oos_cum_paths.png`, `figs/fig_yearly_excess_vs_b2.png`.
 
-Dated snapshot of this primary run: `docs/rules_results_2026-11-03/`.
+Dated snapshot of this primary run: `docs/rules_results_2026-11-03/`. The `raw/` CSVs (daily and per-agent paths) are local only and git-ignored.
 
-Rerun: `.venv/bin/python agent_selection_rules.py [--data-dir DIR --out-dir DIR --session-start 11:35 --session-end 13:30]`
+Rerun: `.venv/bin/python agent_selection_rules.py [--data-dir DIR --out-dir DIR --session-start HH:MM --session-end HH:MM]`
 
 ## Diagnostics
 `.venv/bin/python agent_selection_diagnostics.py` → `diagnostics.txt`: single-rule ablation and a random

@@ -10,7 +10,7 @@ start) → P_end, so a constant ±4 hold matches agent exactly.
 No opposite-sign overlay (no sleep-long on short agents). Example figures are
 PnL-only (no left market column).
 
-Default: Mini ES → outputs_eda_light/hold_spell_vs_market/
+Default output: outputs_eda_light/hold_spell_vs_market/ (local only)
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
-FNAME_RE = re.compile(r"pnl_(?:Mini|Nasdaq)_\d+_\d+_([0-9A-Fa-f]+)_(long|short)\.parquet")
+FNAME_RE = re.compile(r"pnl_[^_]+_\d+_\d+_([0-9A-Fa-f]+)_(long|short)\.parquet")
 N_EXAMPLE_SPELLS = 4
 
 
@@ -235,20 +235,20 @@ def main() -> None:
     ap.add_argument(
         "--data-dir",
         type=Path,
-        default=ROOT / "Mini_20261006_2158-120min-1130",
+        default=ROOT / "data",
     )
     ap.add_argument(
         "--out-dir",
         type=Path,
         default=ROOT / "outputs_eda_light" / "hold_spell_vs_market",
     )
-    ap.add_argument("--session-start", default="11:35")
-    ap.add_argument("--session-end", default="13:30")
+    ap.add_argument("--session-start", required=True, help="HH:MM inclusive (supplied by the data owner)")
+    ap.add_argument("--session-end", required=True, help="HH:MM inclusive (supplied by the data owner)")
     ap.add_argument(
         "--sleep-size",
         type=float,
         default=4.0,
-        help="contract size for same-side dead-hold (Mini & Nasdaq dumps use ±4)",
+        help="contract size for same-side dead-hold (the agent dumps use a fixed ±4)",
     )
     ap.add_argument(
         "--no-figs",

@@ -1,9 +1,8 @@
 """
-Scheme C: recompute agent features on the daily ~120min session only.
+Scheme C: recompute agent features on the daily fixed session window only.
 
-Session (empirical, matches all nonzero bar_pnl across 70 agents):
-  Mon–Fri, clock time in [11:35, 13:30] inclusive  → 24 five-minute bars / day
-  (= 120 minutes of bars; folder tag 120min-1130)
+Session (empirical: all nonzero bar_pnl across the 70 agents falls inside it):
+  Mon–Fri, clock time in [--session-start, --session-end] inclusive, 5-minute bars
 
 Two windows (both session-filtered):
   1) from_first: from each agent's first nonzero bar through end (session bars only)
@@ -26,11 +25,11 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / "Mini_20261006_2158-120min-1130"
+DATA = ROOT / "data"
 FEAT = ROOT / "outputs_eda_light" / "features"
 
 FNAME_RE = re.compile(
-    r"^pnl_(?:Mini|Nasdaq)_\d+_\d+_([0-9A-Fa-f]+)_(long|short)\.parquet$"
+    r"^pnl_[^_]+_\d+_\d+_([0-9A-Fa-f]+)_(long|short)\.parquet$"
 )
 
 
@@ -113,8 +112,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-dir", type=Path, default=DATA)
     ap.add_argument("--out-dir", type=Path, default=FEAT)
-    ap.add_argument("--session-start", default="11:35", help="HH:MM inclusive")
-    ap.add_argument("--session-end", default="13:30", help="HH:MM inclusive")
+    ap.add_argument("--session-start", required=True, help="HH:MM inclusive (supplied by the data owner)")
+    ap.add_argument("--session-end", required=True, help="HH:MM inclusive (supplied by the data owner)")
     args = ap.parse_args()
 
     data_dir: Path = args.data_dir

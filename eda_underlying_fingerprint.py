@@ -1,6 +1,7 @@
 """
-Identify Mini / Nasdaq parquet underlyings by aligning local daily last prices
-to Yahoo continuous futures (ES=F, NQ=F).
+Identify the underlying of each local parquet folder by aligning local daily last
+prices to a list of candidate Yahoo continuous-futures series (REFS).
+The verdict is written to a local output folder only and is not published.
 
 Outputs under outputs_eda_light/underlying/.
 Requires: yfinance (installed on first run if missing).
@@ -17,11 +18,11 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "outputs_eda_light" / "underlying"
 YAHOO_START, YAHOO_END = "2015-01-01", "2026-10-10"
 
-FOLDERS = {
-    "Mini": ROOT / "Mini_20261006_2158-120min-1130",
-    "Nasdaq": ROOT / "Nasdaq_20261019_1548_120min_1130",
+FOLDERS = {  # label -> local parquet folder (git-ignored)
+    "main": ROOT / "data",
+    "cut2": ROOT / "data_cut2",
 }
-REFS = ("ES=F", "NQ=F")
+REFS = ("ES=F", "NQ=F", "YM=F", "RTY=F")  # candidate equity-index continuous futures
 
 
 def _ensure_yfinance():
@@ -123,11 +124,10 @@ def main() -> None:
     S = pd.DataFrame(rows)
     S.to_csv(OUT / "yahoo_align_summary.csv", index=False)
 
-    # recent side-by-side for the winning pairs
+    # recent side-by-side for the best-matching pair of each local folder
     pieces = []
-    for label, yahoo in (("Mini", "ES=F"), ("Nasdaq", "NQ=F")):
-        if label not in locals_:
-            continue
+    for label in locals_:
+        yahoo = S.loc[S["local_label"] == label].sort_values("level_corr", ascending=False).iloc[0]["yahoo"]
         both = pd.concat(
             [locals_[label].rename(f"{label}_local"), refs[yahoo].rename(yahoo)],
             axis=1,
@@ -154,9 +154,12 @@ def main() -> None:
         best = sub.iloc[0]
         ratio_ok = abs(best.get("median_local_over_ref", 0) - 1.0) < 0.02
         conf = "high" if best.get("level_corr", 0) > 0.999 and ratio_ok else "medium"
-        product = {"ES=F": "CME E-mini S&P 500 (ES)", "NQ=F": "CME E-mini Nasdaq-100 (NQ)"}.get(
-            best["yahoo"], best["yahoo"]
-        )
+        product = {
+            "ES=F": "CME E-mini S&P 500 (ES)",
+            "NQ=F": "CME E-mini Nasdaq-100 (NQ)",
+            "YM=F": "CBOT E-mini Dow (YM)",
+            "RTY=F": "CME E-mini Russell 2000 (RTY)",
+        }.get(best["yahoo"], best["yahoo"])
         verdict_lines.append(
             f"- **{label}** (`{FOLDERS[label].name}`) → **{product}** "
             f"(vs `{best['yahoo']}`, level_corr={best['level_corr']:.6f}, "

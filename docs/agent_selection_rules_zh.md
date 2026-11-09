@@ -1,7 +1,7 @@
 # Agent 选人规则（白话版）
 
 状态：**研究设计草稿；尚未实现或验证**。  
-来源：会议要求（故事 → 量化 → 验证）、`sharpe_dd` 图表观察（尤其 `fig_cum_pnl_all70_stacked.png`）、外部文献。
+来源：会议要求（故事 → 量化 → 验证）、本地 `sharpe_dd` 图表观察（逐 agent 累计 PnL 图，不入库）、外部文献。
 
 目标：从 70 个 agent 里，**只用"当时已经知道"的信息**，选出一组，让组合比"全部等权"更好。  
 本文把"看图得到的故事"翻译成可计算的规则。**这些规则都只是待检验的想法，不是已证明的规律。**
@@ -18,7 +18,7 @@
 | PnL                | 盈亏。数据里是 `cum_ot_pnl` 的逐 bar 增量，疑似美元，但点值与成本尚未确认 | 所有比较都用它；单位确认前只报"PnL 单位"，不宣称真实资本回报 |
 | long / short agent | long 靠涨赚钱，下单固定 +4；short 靠跌赚钱，下单固定 −4           | 大跌对 long 是坏事，对 short 是机会，必须分开看    |
 | flat               | 当天没下单，仓位为 0，PnL 为 0                            | "没出手"和"出手但没赚"是两回事，要分清             |
-| session            | 每天 11:35 到 13:30 这段交易时间                        | 只看这段的盈亏，其余时间全是 0                  |
+| session            | 每天一段固定的日内交易时间窗口（具体时刻不公开）        | 只看这段的盈亏，其余时间全是 0                  |
 
 
 
@@ -56,8 +56,8 @@
 | 时间           | 可做什么                                   |
 | ------------ | -------------------------------------- |
 | 决策日前一交易日结束   | `feature_asof`：市场状态、agent 历史和相关性全部截止这里 |
-| 决策日约 11:30   | agent 当天独立决定是否下单；不下单即 flat             |
-| 11:35 起      | 可开始观察是否进入 ±4 仓位；11:35–13:30 PnL 只属于结果  |
+| 决策日 session 开始前 | agent 当天独立决定是否下单；不下单即 flat             |
+| session 开始起 | 可开始观察是否进入 ±4 仓位；session 内 PnL 只属于结果  |
 | 当日 session 内 | 已下单仓位当日平仓；下一交易日重新独立决策                  |
 | 持有/标签窗口结束    | `label_end`：只有此时标签才成熟，可供以后训练           |
 
@@ -424,9 +424,9 @@ pseudo-OOS 的意思：历史数据已经被我们看过并用来想规则，所
 
 正式实现前必须先处理：
 
-1. `eda_sharpe_dd_persistence.py` 与 `eda_agent_corr_session.py` 当前先裁 session 再按日 `diff()`，每天 11:35 首根 PnL 会被置 0；应改为完整时间轴先 diff，再裁 session。
+1. `eda_sharpe_dd_persistence.py` 与 `eda_agent_corr_session.py` 当前先裁 session 再按日 `diff()`，每天 session 首根 PnL 会被置 0；应改为完整时间轴先 diff，再裁 session。
 2. 统一 inferred position / entry 口径；废止把 nonzero PnL bar 称为交易次数。
-3. 确认时间戳含义、时区、11:30/11:35 信息边界。
+3. 确认时间戳含义、时区、决策时刻与 session 开始之间的信息边界。
 4. 获取或确认 agent launch/retire/availability；否则明确 universe 是代理口径。
 5. 确认 point value、交易成本、滑点与 PnL 是否可直接加总。
 

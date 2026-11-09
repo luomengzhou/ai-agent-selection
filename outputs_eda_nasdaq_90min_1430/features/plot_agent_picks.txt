@@ -1,4 +1,0 @@
-earliest_active	C35AF0894E1665DE
-latest_active	29D0C691C4274CD6
-high_zero_share	47F1DB61FF1A37BC
-high_final_pnl	36C31A15F5EAC25D

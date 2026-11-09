@@ -6,10 +6,19 @@ venv/
 *.pem
 *.key
 
-# Raw agent datasets (too large; keep local only)
+# Raw agent datasets (Sauma Capital data; keep local only)
+data/
 Mini_*/
 Nasdaq_*/
 *.parquet
+
+# Derived agent-level outputs (per-agent stats, cum-PnL plots, launch dates,
+# session window, underlying fingerprint): regenerated locally, never committed
+outputs_eda_*/
+outputs_rules_*/raw/
+outputs_rules_*/experiments/raw/
+docs/rules_results_*/raw/
+docs/rules_results_*/note_excess_vs_market_*.md
 
 # Local run logs
 outputs_eda_nasdaq_run.log

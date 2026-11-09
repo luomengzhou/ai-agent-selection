@@ -10,11 +10,11 @@ Sauma runs a pool of **70 systematic agents** (45 long, 25 short) on a single eq
 
 ## What's done
 
-**Phase 1 — EDA on raw PnL paths** (`eda_*.py`, outputs in `outputs_eda_*`)
-- Found that all non-zero PnL falls in one 120-minute session window, then rebuilt every statistic (moments, Sharpe, drawdown) on session-only bars so idle hours don't distort them.
-- Identified the underlying by matching end-of-day prices against ES and NQ futures (`eda_underlying_fingerprint.py`).
+**Phase 1 — EDA on raw PnL paths** (`eda_*.py`; aggregate results in [`docs/eda_aggregate_results.md`](docs/eda_aggregate_results.md), agent-level outputs stay local)
+- Found that all non-zero PnL falls in one short fixed intraday session window, then rebuilt every statistic (moments, Sharpe, drawdown) on session-only bars so idle hours don't distort them.
+- Verified the underlying by matching end-of-day prices against candidate continuous futures series (`eda_underlying_fingerprint.py`; method only, the result is not published).
 - Measured trade frequency, holding spells, and agent co-activity. Compared PnL within each holding spell to a passive same-direction hold, to separate timing skill from market exposure.
-- Checked **performance persistence**: the rank correlation of year-over-year agent Sharpe is about −0.04. Past winners are not future winners. This finding shaped everything after it.
+- Checked **performance persistence**: the rank correlation of year-over-year agent Sharpe is about −0.04 ([`docs/eda_aggregate_results.md`](docs/eda_aggregate_results.md)). Past winners are not future winners. This finding shaped everything after it.
 
 **Phase 2 — Rule-based selection baseline** (`agent_selection_*.py`, write-up in [`docs/`](docs/agent_selection_rules_en.md))
 - Six interpretable rules (R1–R6): side-aware regime participation, recent deterioration, efficiency/Calmar, and others. All thresholds were fixed in advance, not fitted.
@@ -33,7 +33,7 @@ Sauma runs a pool of **70 systematic agents** (45 long, 25 short) on a single eq
 
 **Result: negative, and informative.** The rules do worse than random selection, at the 5th–8th percentile of the null. The diagnostics explain why:
 1. R1's stress threshold was anchored by 2008, so it never fired in 2012–2017. A rolling window fixes that, but the rule still has no selection power.
-2. Agents trade only about 10 times a year, so participation-based features barely vary across agents.
+2. Agents trade only a handful of times a year, so participation-based features barely vary across agents.
 3. Past-performance features carry no signal, consistent with the near-zero persistence above.
 4. Holding about 12 agents instead of about 60 costs roughly 0.5 Sharpe in diversification alone, even with random picks. A selector has to overcome that loss first.
 
@@ -61,23 +61,21 @@ eda_*.py                      Phase 1 EDA scripts
 agent_selection_rules.py      R1–R6 + yearly walk-forward
 agent_selection_diagnostics.py   single-rule ablation + random null
 agent_selection_experiments.py   correction directions A / B
+run_eda_nasdaq.sh             run the EDA suite on another data cut
 tests/                        smoke tests for the pure functions (Sharpe, drawdown, label lag, de-clone)
-outputs_eda_light/            Phase 1 on the main cut: 70 agents (the one used in Phase 2)
-outputs_eda_nasdaq_*/         same EDA on two other Sauma cuts (148 and 103 agents, different session windows)
-outputs_rules_light/          Phase 2 results (aggregate tables + figures)
-docs/                         methodology, rule definitions, survey (EN + 中文), dated results snapshot
+outputs_rules_light/          Phase 2 results (aggregate tables + figures only; raw/ stays local)
+docs/                         methodology, rule definitions, survey (EN + 中文), EDA aggregates, dated results snapshot
 ```
 
 ## Data and how to run
 
-- Data: 5-minute cumulative-PnL parquet files per agent, provided by Sauma Capital for this course project. **The raw files are not in this repo and are not redistributed.** Only aggregate statistics and figures are committed; the per-agent / daily `raw/` CSVs the scripts write are kept local (`.gitignore` excludes the data folders).
-- Agent identifiers in the outputs are truncated hashes, not strategy names.
+- **Data note.** Agent-level PnL data belongs to Sauma Capital and is not redistributed; only aggregate statistics are reported. Scripts expect the raw parquet files locally (see `.gitignore`). Per-agent statistics, launch dates, cumulative-PnL plots, trade-frequency figures, the session window and the identified underlying are all derived from the live pool and are deliberately absent from this repository; the `eda_*.py` scripts regenerate them locally into `outputs_eda_*/`, which is git-ignored.
 - Install: `pip install -r requirements.txt` (pandas, numpy, scipy, matplotlib, pyarrow; `yfinance` only for `eda_underlying_fingerprint.py`).
-- Rerun Phase 2 against a local data folder:
+- Rerun Phase 2 against a local data folder (the session window `HH:MM` values are supplied by the data owner):
 
 ```bash
-python agent_selection_rules.py --data-dir path/to/Mini_* --out-dir outputs_rules_light --session-start 11:35 --session-end 13:30
-python agent_selection_diagnostics.py --data-dir path/to/Mini_*     # needs outputs_rules_light/raw/ from the step above
-python agent_selection_experiments.py --data-dir path/to/Mini_*
+python agent_selection_rules.py --data-dir path/to/parquet_dir --out-dir outputs_rules_light --session-start HH:MM --session-end HH:MM
+python agent_selection_diagnostics.py --data-dir path/to/parquet_dir --session-start HH:MM --session-end HH:MM   # needs outputs_rules_light/raw/ from the step above
+python agent_selection_experiments.py --data-dir path/to/parquet_dir --session-start HH:MM --session-end HH:MM
 pytest -q                                                           # smoke tests, no data needed
 ```

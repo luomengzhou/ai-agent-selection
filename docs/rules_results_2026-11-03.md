@@ -1,6 +1,6 @@
 # 选人规则第一轮结果（2026-11-03，汇报用）
 
-数据：Mini，70 个 agent（45 long / 25 short），session 11:35–13:30，2006-01 到 2026-10-02。  
+数据：主数据集，70 个 agent（45 long / 25 short），固定日内 session 窗口（具体时刻不公开），2006-01 到 2026-10-02。  
 代码：`agent_selection_rules.py`（主规则）、`agent_selection_diagnostics.py`（消融 + 随机对照）、`agent_selection_experiments.py`（两个修正方向）。  
 规则定义见 `docs/agent_selection_rules_zh.md`。
 
@@ -15,12 +15,11 @@
 | [`summary.txt`](rules_results_2026-11-03/summary.txt) | 同上文字版 + 冻结的 D 参数 |
 | `raw/oos_daily_paths.csv` | 日频 OOS PnL（rules / b1 / b2）+ 市场 close |
 | `raw/selection_by_year.csv` | 每年每个候选 agent 的特征、分数、聚类、是否入选 |
-| `raw/yearly_excess_vs_market.csv` | 逐年超额 vs 市场收益/回撤 |
+| `raw/yearly_excess_vs_market.csv` | 逐年超额 vs 市场收益/回撤（仅本地） |
 | [`figs/`](rules_results_2026-11-03/figs/) | 累计曲线（含 R1…R6 单规则虚线）、逐年超额柱状图 |
 | `raw/oos_daily_paths_with_single_rules.csv` | 主路径 + 单规则日频 PnL |
 | [`single_rule_path_stats.csv`](rules_results_2026-11-03/single_rule_path_stats.csv) | 单规则拼接路径指标 |
-| [`note_excess_vs_market_zh.md`](rules_results_2026-11-03/note_excess_vs_market_zh.md) | 中文附注：超额和“市场好坏” |
-| [`note_excess_vs_market_en.md`](rules_results_2026-11-03/note_excess_vs_market_en.md) | English note for TA / professor |
+| `note_excess_vs_market_{zh,en}.md` | 超额 vs 市场好坏附注（含标的逐年收益，仅本地，不入库） |
 
 诊断与修正方向（另两支脚本）仍在 `outputs_rules_light/diagnostics.txt` 与 `outputs_rules_light/experiments/`。  
 日常复跑默认仍写 `outputs_rules_light/`（字段与上表相同）。
@@ -79,7 +78,7 @@
 
 简短结论：2018 / 2022 压力年超额为大正，2019–2021 强上涨年为大负，方向有一点；但 2023/2024 大牛年超额仍为正，且 2018 起只有 9 个年点（Spearman −0.63，p≈0.07），**还不能当成稳定的 risk-appetite 结论**。
 
-完整表与表述：中文 [`note_excess_vs_market_zh.md`](rules_results_2026-11-03/note_excess_vs_market_zh.md)，英文 [`note_excess_vs_market_en.md`](rules_results_2026-11-03/note_excess_vs_market_en.md)，数据 `raw/yearly_excess_vs_market.csv`（本地）。
+完整表与表述见本地附注 `note_excess_vs_market_{zh,en}.md` 与数据 `raw/yearly_excess_vs_market.csv`（均不入库，因为会暴露标的逐年收益）。
 
 ---
 

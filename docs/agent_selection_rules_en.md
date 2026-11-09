@@ -1,6 +1,6 @@
 # Agent Selection Rules (R1–R6)
 
-Status: **implemented for Mini; first walk-forward results are negative** (rules do not beat side-equal-weight or a same-size random draw).  
+Status: **implemented on the main 70-agent cut; first walk-forward results are negative** (rules do not beat side-equal-weight or a same-size random draw).  
 Chinese design memo (full rationale): [`agent_selection_rules_zh.md`](agent_selection_rules_zh.md).  
 First-round results: [`rules_results_2026-11-03.md`](rules_results_2026-11-03.md).
 

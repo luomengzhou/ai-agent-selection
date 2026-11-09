@@ -25,9 +25,9 @@ from scipy.spatial.distance import squareform
 from scipy.stats import norm
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / "Mini_20261006_2158-120min-1130"
+DATA = ROOT / "data"
 OUT = ROOT / "outputs_rules_light"
-FNAME_RE = re.compile(r"pnl_(?:Mini|Nasdaq)_\d+_\d+_([0-9A-Fa-f]+)_(long|short)\.parquet")
+FNAME_RE = re.compile(r"pnl_[^_]+_\d+_\d+_([0-9A-Fa-f]+)_(long|short)\.parquet")
 
 # ---- "D" parameters (doc leaves them to us) ----
 MIN_ENTRIES = 10        # gate: entries for entering the pool
@@ -297,8 +297,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-dir", type=Path, default=DATA)
     ap.add_argument("--out-dir", type=Path, default=OUT)
-    ap.add_argument("--session-start", default="11:35")
-    ap.add_argument("--session-end", default="13:30")
+    ap.add_argument("--session-start", required=True, help="HH:MM inclusive (supplied by the data owner)")
+    ap.add_argument("--session-end", required=True, help="HH:MM inclusive (supplied by the data owner)")
     a = ap.parse_args()
     figs, raw = a.out_dir / "figs", a.out_dir / "raw"
     figs.mkdir(parents=True, exist_ok=True)
@@ -371,7 +371,7 @@ def main():
         "- `summary.txt`: concatenated-path stats, yearly table, D parameters.\n"
         "- `figs/fig_oos_cum_paths.png`, `figs/fig_yearly_excess_vs_b2.png`.\n\n"
         "Rerun: `.venv/bin/python agent_selection_rules.py [--data-dir DIR --out-dir DIR "
-        "--session-start 11:35 --session-end 13:30]`\n")
+        "--session-start HH:MM --session-end HH:MM]`\n")
     print((a.out_dir / "summary.txt").read_text())
 
 

@@ -40,4 +40,4 @@ STRESS_Q = 0.2
 CORR_MIN_DAYS = 252
 RHO_CUT = 0.7
 TREND_WINDOWS = (21, 63, 252)
-session = 11:35-13:30
+session = (fixed daily window; supplied by the data owner, not published)

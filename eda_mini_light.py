@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sauma Capital Mini — lightweight EDA (memory-conscious, one file at a time).
+Sauma Capital agent PnL — lightweight EDA (memory-conscious, one file at a time).
 
 Full methodology: docs/METHODOLOGY.md
 
@@ -42,11 +42,11 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
-DATA_DIR = ROOT / "Mini_20261006_2158-120min-1130"
+DATA_DIR = ROOT / "data"
 OUT_DIR = ROOT / "outputs_eda_light"
 LONG_GAP_SEC = 5 * 60  # >5 min for weekday×hour counts
 FNAME_RE = re.compile(
-    r"^pnl_(?:Mini|Nasdaq)_\d+_\d+_([0-9A-Fa-f]+)_(long|short)\.parquet$"
+    r"^pnl_[^_]+_\d+_\d+_([0-9A-Fa-f]+)_(long|short)\.parquet$"
 )
 
 

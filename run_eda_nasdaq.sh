@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
-# Run the same EDA suite as Mini on both Nasdaq datasets.
-# Default skips time/ + trades/ (session window already in folder titles).
-# Pass --with-time-trades to also refresh those.
+# Run the EDA suite on one local data cut.
+#   usage: run_eda_nasdaq.sh [--with-time-trades] DATA_DIR OUT_DIR SESSION_START SESSION_END
+#   e.g.   run_eda_nasdaq.sh data_cut2 outputs_eda_cut2 HH:MM HH:MM
+# DATA_DIR holds the raw parquet files; OUT_DIR is git-ignored (outputs_eda_*).
+# Default skips time/ + trades/; pass --with-time-trades to also refresh those.
 set -euo pipefail
 cd "$(dirname "$0")"
-PY=.venv/bin/python
+PY=${PY:-python}
 WITH_TIME_TRADES=0
 if [[ "${1:-}" == "--with-time-trades" ]]; then
   WITH_TIME_TRADES=1
   shift
+fi
+if [[ $# -ne 4 ]]; then
+  echo "usage: $0 [--with-time-trades] DATA_DIR OUT_DIR SESSION_START SESSION_END" >&2
+  exit 1
 fi
 
 run_one() {
@@ -44,7 +50,7 @@ run_one() {
     --session-start "$sess_start" --session-end "$sess_end"
 
   echo "--- eda_hold_spell_vs_market ---"
-  # Match Mini: summary/raw only (per-agent PNGs are not in Mini outputs)
+  # summary/raw only (no per-agent PNGs)
   $PY eda_hold_spell_vs_market.py --data-dir "$data_dir" \
     --out-dir "$out/hold_spell_vs_market" \
     --session-start "$sess_start" --session-end "$sess_end" \
@@ -53,14 +59,6 @@ run_one() {
   echo "======== $(date '+%F %T') DONE $out ========"
 }
 
-run_one \
-  Nasdaq_20261019_1548_120min_1130 \
-  outputs_eda_nasdaq_120min_1130 \
-  11:35 13:30
-
-run_one \
-  Nasdaq_20261020_0912_90min_1430 \
-  outputs_eda_nasdaq_90min_1430 \
-  14:35 16:00
+run_one "$1" "$2" "$3" "$4"
 
 echo "ALL DONE $(date '+%F %T')"
