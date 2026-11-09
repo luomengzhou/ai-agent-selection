@@ -6,18 +6,18 @@
 
 ## 完整结果文件（不要只看本 MD）
 
-`agent_selection_rules.py` 本轮全部产出已导出到 [`rules_results_2026-11-03/`](rules_results_2026-11-03/)：
+`agent_selection_rules.py` 本轮全部产出已导出到 [`rules_results_2026-11-03/`](rules_results_2026-11-03/)。**注：`raw/` 下的日频 / 逐 agent CSV 只保留在本地，不随仓库发布**（含逐 agent 日度 PnL）；下表中 `raw/` 条目仅作说明：
 
 | 文件 | 内容 |
 |------|------|
 | [`concat_path_stats.csv`](rules_results_2026-11-03/concat_path_stats.csv) | 拼接 OOS 路径总 PnL / Sharpe / maxDD / Calmar |
 | [`yearly_table.csv`](rules_results_2026-11-03/yearly_table.csv) | 逐年 pool/kept、各路径 PnL/Sharpe、相对 b2 超额 |
 | [`summary.txt`](rules_results_2026-11-03/summary.txt) | 同上文字版 + 冻结的 D 参数 |
-| [`raw/oos_daily_paths.csv`](rules_results_2026-11-03/raw/oos_daily_paths.csv) | 日频 OOS PnL（rules / b1 / b2）+ 市场 close |
-| [`raw/selection_by_year.csv`](rules_results_2026-11-03/raw/selection_by_year.csv) | 每年每个候选 agent 的特征、分数、聚类、是否入选 |
-| [`raw/yearly_excess_vs_market.csv`](rules_results_2026-11-03/raw/yearly_excess_vs_market.csv) | 逐年超额 vs 市场收益/回撤 |
+| `raw/oos_daily_paths.csv` | 日频 OOS PnL（rules / b1 / b2）+ 市场 close |
+| `raw/selection_by_year.csv` | 每年每个候选 agent 的特征、分数、聚类、是否入选 |
+| `raw/yearly_excess_vs_market.csv` | 逐年超额 vs 市场收益/回撤 |
 | [`figs/`](rules_results_2026-11-03/figs/) | 累计曲线（含 R1…R6 单规则虚线）、逐年超额柱状图 |
-| [`raw/oos_daily_paths_with_single_rules.csv`](rules_results_2026-11-03/raw/oos_daily_paths_with_single_rules.csv) | 主路径 + 单规则日频 PnL |
+| `raw/oos_daily_paths_with_single_rules.csv` | 主路径 + 单规则日频 PnL |
 | [`single_rule_path_stats.csv`](rules_results_2026-11-03/single_rule_path_stats.csv) | 单规则拼接路径指标 |
 | [`note_excess_vs_market_zh.md`](rules_results_2026-11-03/note_excess_vs_market_zh.md) | 中文附注：超额和“市场好坏” |
 | [`note_excess_vs_market_en.md`](rules_results_2026-11-03/note_excess_vs_market_en.md) | English note for TA / professor |
@@ -79,7 +79,7 @@
 
 简短结论：2018 / 2022 压力年超额为大正，2019–2021 强上涨年为大负，方向有一点；但 2023/2024 大牛年超额仍为正，且 2018 起只有 9 个年点（Spearman −0.63，p≈0.07），**还不能当成稳定的 risk-appetite 结论**。
 
-完整表与表述：中文 [`note_excess_vs_market_zh.md`](rules_results_2026-11-03/note_excess_vs_market_zh.md)，英文 [`note_excess_vs_market_en.md`](rules_results_2026-11-03/note_excess_vs_market_en.md)，数据 [`yearly_excess_vs_market.csv`](rules_results_2026-11-03/raw/yearly_excess_vs_market.csv)。
+完整表与表述：中文 [`note_excess_vs_market_zh.md`](rules_results_2026-11-03/note_excess_vs_market_zh.md)，英文 [`note_excess_vs_market_en.md`](rules_results_2026-11-03/note_excess_vs_market_en.md)，数据 `raw/yearly_excess_vs_market.csv`（本地）。
 
 ---
 

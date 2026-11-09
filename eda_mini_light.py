@@ -152,7 +152,7 @@ def main() -> int:
             {
                 "agent_id": agent_id,
                 "side": side,
-                "path": str(p),
+                "path": p.name,  # file name only; no local absolute paths in committed outputs
                 "n_rows": None,  # filled on read
                 "file_bytes": p.stat().st_size,
             }

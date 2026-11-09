@@ -2,6 +2,8 @@
 
 Snapshot of `agent_selection_rules.py` walk-forward outputs (Mini, session 11:35–13:30).
 
+Note: the `raw/` CSVs listed below (daily and per-agent paths) are kept local and are **not** committed to this repository; only the aggregate tables and figures are.
+
 | File | Content |
 |------|---------|
 | `concat_path_stats.csv` | Concatenated OOS path totals (PnL, Sharpe, maxDD, Calmar, years beat b2) |

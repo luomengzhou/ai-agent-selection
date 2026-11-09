@@ -50,7 +50,9 @@ The survey in [`docs/agent_selection_dl_survey.md`](docs/agent_selection_dl_surv
 
 - The rules were designed after looking at the full history, so Phase 2 is **pseudo**-OOS.
 - PnL is in raw dollar units; contract multiplier and costs are unconfirmed.
-- The pool is thin before 2018 (0 long and 1–3 short agents live), so comparisons there carry little weight.
+- The pool is thin early on: through 2012 only 1–3 short agents and at most 2 long agents are live, and the long side only passes ~15 agents in 2016; because of the R1 gate (its stress threshold never fired in 2012–2017) the rules admitted **zero long agents until 2018**, so 2010–2017 comparisons carry little weight. The tables also report 2018–2026 separately.
+- The 70 agents are the pool that is live today; agents retired before the data extract are not observed, so both the rules and the 1/N benchmarks carry the same survivorship bias.
+- The random null is a same-size top-20% draw from the same point-in-time pool (seeded, 300 draws); it does not apply the R6 de-clone step, so it holds slightly more agents than the rules path in some years.
 
 ## Layout
 
@@ -59,9 +61,23 @@ eda_*.py                      Phase 1 EDA scripts
 agent_selection_rules.py      R1–R6 + yearly walk-forward
 agent_selection_diagnostics.py   single-rule ablation + random null
 agent_selection_experiments.py   correction directions A / B
-outputs_eda_*/                figures + summary tables (one folder per data cut)
-outputs_rules_light/          Phase 2 results
-docs/                         methodology, rule definitions, survey (EN + 中文)
+tests/                        smoke tests for the pure functions (Sharpe, drawdown, label lag, de-clone)
+outputs_eda_light/            Phase 1 on the main cut: 70 agents (the one used in Phase 2)
+outputs_eda_nasdaq_*/         same EDA on two other Sauma cuts (148 and 103 agents, different session windows)
+outputs_rules_light/          Phase 2 results (aggregate tables + figures)
+docs/                         methodology, rule definitions, survey (EN + 中文), dated results snapshot
 ```
 
-Raw agent data is not included. Point the scripts at a local `Mini_*` / `Nasdaq_*` folder to rerun.
+## Data and how to run
+
+- Data: 5-minute cumulative-PnL parquet files per agent, provided by Sauma Capital for this course project. **The raw files are not in this repo and are not redistributed.** Only aggregate statistics and figures are committed; the per-agent / daily `raw/` CSVs the scripts write are kept local (`.gitignore` excludes the data folders).
+- Agent identifiers in the outputs are truncated hashes, not strategy names.
+- Install: `pip install -r requirements.txt` (pandas, numpy, scipy, matplotlib, pyarrow; `yfinance` only for `eda_underlying_fingerprint.py`).
+- Rerun Phase 2 against a local data folder:
+
+```bash
+python agent_selection_rules.py --data-dir path/to/Mini_* --out-dir outputs_rules_light --session-start 11:35 --session-end 13:30
+python agent_selection_diagnostics.py --data-dir path/to/Mini_*     # needs outputs_rules_light/raw/ from the step above
+python agent_selection_experiments.py --data-dir path/to/Mini_*
+pytest -q                                                           # smoke tests, no data needed
+```
