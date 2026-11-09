@@ -1,0 +1,125 @@
+MODE: INCL. IDLE DAYS — session days with PnL==0 kept as 0
+Sharpe = mean/std of daily session PnL × √252 (idle days after first trade stay as 0 and dilute mean/std)
+session=11:35–13:30  agents=70  long=45
+Spearman(Sharpe, MaxDD)=-0.68
+Spearman(Sharpe, entries/yr)=0.33
+Spearman(MaxDD, entries/yr)=0.22
+entries/yr median=10.0 max=34.2
+days in series median=2732
+nonzero-PnL bars per entry median=21.7
+overlap top10 Sharpe & lowest10 MaxDD = 4
+
+Top10 Sharpe:
+         side   first_day  years  n_days_in_series  n_active_days  final_pnl  sharpe  max_dd  calmar  n_entries  entries_per_year  trade_hit_rate  active_bars  bars_per_entry  day_hit_rate
+agent                                                                                                                                                                                       
+4282B2   long  2023-10-10   2.98               779             64     1047.0    1.84    97.0    3.62         65             21.82            0.66         1407           21.65          0.66
+564C3C   long  2024-03-05   2.58               674             87     1519.0    1.80   158.0    3.73         88             34.16            0.65         1917           21.78          0.67
+9B5016   long  2021-11-11   4.89              1277             91     2113.0    1.70   146.0    2.96         91             18.61            0.69         1980           21.76          0.70
+50C24D  short  2024-11-20   1.86               488             12      704.0    1.54    44.0    8.58         12              6.44            0.75          274           22.83          0.75
+8272A1   long  2017-07-12   9.22              2408             59     1322.0    1.31    45.0    3.18         61              6.61            0.69         1285           21.07          0.68
+181F66   long  2022-11-22   3.86              1009             84     1351.0    1.29   265.0    1.32         85             22.02            0.73         1836           21.60          0.68
+EE8680  short  2021-09-17   5.04              1316             51     1734.0    1.22   266.0    1.29         51             10.12            0.69         1133           22.22          0.69
+E11C0C  short  2022-03-14   4.55              1190             24      968.0    1.20    64.0    3.32         24              5.27            0.71          531           22.12          0.71
+5139EF   long  2021-04-21   5.45              1423             58     1122.0    1.20   251.0    0.82         58             10.65            0.71         1259           21.71          0.76
+BE0592   long  2013-05-28  13.35              3484            160     2172.0    1.18   228.0    0.71        162             12.14            0.68         3397           20.97          0.67
+
+Lowest10 MaxDD:
+         side   first_day  years  n_days_in_series  n_active_days  final_pnl  sharpe  max_dd  calmar  n_entries  entries_per_year  trade_hit_rate  active_bars  bars_per_entry  day_hit_rate
+agent                                                                                                                                                                                       
+50C24D  short  2024-11-20   1.86               488             12      704.0    1.54    44.0    8.58         12              6.44            0.75          274           22.83          0.75
+8272A1   long  2017-07-12   9.22              2408             59     1322.0    1.31    45.0    3.18         61              6.61            0.69         1285           21.07          0.68
+E11C0C  short  2022-03-14   4.55              1190             24      968.0    1.20    64.0    3.32         24              5.27            0.71          531           22.12          0.71
+87C9DD   long  2013-05-28  13.35              3484            139     1326.0    1.02    90.0    1.10        143             10.71            0.68         2931           20.50          0.68
+469830   long  2015-09-07  11.07              2890             30      633.0    0.70    92.0    0.62         30              2.71            0.70          639           21.30          0.73
+4282B2   long  2023-10-10   2.98               779             64     1047.0    1.84    97.0    3.62         65             21.82            0.66         1407           21.65          0.66
+7BC00D   long  2017-03-06   9.57              2500             63     1269.0    0.95    98.0    1.35         63              6.58            0.73         1370           21.75          0.68
+CD0F8F  short  2019-06-26   7.27              1898             17      282.0    0.49   107.0    0.36         17              2.34            0.71          368           21.65          0.71
+076D70  short  2025-04-10   1.48               387              5      154.0    0.53   118.0    0.88          5              3.38            0.60          112           22.40          0.60
+DB6A87   long  2018-07-03   8.25              2154             42      541.0    0.73   136.0    0.48         43              5.21            0.65          940           21.86          0.67
+
+YoY Sharpe rank persistence:
+ year  n_agents  spearman_next_year
+ 2014        11               -0.11
+ 2015        18               -0.09
+ 2016        24                0.05
+ 2017        29               -0.06
+ 2018        41               -0.37
+ 2019        48                0.17
+ 2020        44               -0.03
+ 2021        45               -0.44
+ 2022        59               -0.37
+ 2023        53                0.49
+ 2024        54                0.12
+ 2025        63                0.11
+mean spearman = -0.04
+
+Own yearly-Sharpe autocorr (n>=5 years): median=-0.15  positive=14/53
+         side  n_years  autocorr
+agent                           
+62F981  short       11     -0.88
+12A79F  short       13     -0.77
+2B921B  short        9     -0.74
+1BE2B0   long       10     -0.67
+53AC2B  short        7     -0.63
+9A4B0F   long       10     -0.58
+7438A5   long        8     -0.56
+B12DBC  short        9     -0.53
+08CED1  short       16     -0.52
+2DD3E0   long        9     -0.52
+3FEFB8  short       16     -0.50
+0CD79B   long        7     -0.47
+D42A50   long        8     -0.46
+68F869   long        7     -0.45
+C87BBC   long       11     -0.44
+C53FD2   long       11     -0.43
+2106F0   long        9     -0.40
+70446F  short       14     -0.34
+9AC6C0   long        7     -0.31
+F1958F   long       14     -0.28
+5139EF   long        5     -0.24
+0E88B0   long       10     -0.24
+5BDDE7   long       11     -0.21
+1B1FC8  short       12     -0.17
+8E6326   long       11     -0.16
+F30EA3   long        8     -0.15
+C0E3DE   long       12     -0.15
+38C92B   long       10     -0.14
+022B0B  short        9     -0.13
+48769B  short       14     -0.13
+EE8680  short        5     -0.12
+BE0592   long       13     -0.12
+87C9DD   long       13     -0.11
+4CDA8C   long        8     -0.11
+298CE0   long       11     -0.11
+69D77B   long       12     -0.07
+7A0D80   long       12     -0.07
+75AA46  short       11     -0.03
+F1EAB1   long       12     -0.01
+89FA0B   long       11      0.03
+7BC00D   long        8      0.04
+AECA83  short       14      0.05
+53E49F   long       10      0.07
+B2010B   long        5      0.08
+B58C04  short       11      0.12
+43856D  short        5      0.16
+469830   long       10      0.19
+BA1892   long        8      0.26
+E34B66  short       13      0.34
+84EC91  short       10      0.46
+DF5E52  short        8      0.66
+DB6A87   long        8      0.66
+8272A1   long        9      0.69
+
+Walk-forward top10 trailing Sharpe vs equal-weight eligible (per-agent avg PnL):
+ year  n_eligible  topk_pnl  all_eligible_pnl  topk_sharpe  all_eligible_sharpe
+ 2017          31      21.5             21.94         1.11                 1.33
+ 2018          39     120.7            126.59         2.52                 3.47
+ 2019          44      -8.4             39.52        -0.29                 1.62
+ 2020          50     162.8            163.76         3.75                 4.29
+ 2021          56      63.9             80.80         1.37                 2.69
+ 2022          57      13.3            108.37         0.15                 1.71
+ 2023          62     283.8            198.42         3.25                 3.58
+ 2024          66     205.5            128.59         2.43                 2.65
+ 2025          67     357.7            219.24         3.12                 2.25
+ 2026          69     241.2            104.22         2.11                 1.76
+years topk beats all: 4/10; mean topk SR=1.95 vs all SR=2.53

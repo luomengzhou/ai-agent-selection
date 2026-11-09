@@ -1,0 +1,12 @@
+metric,value
+n_agents,70.0
+n_beat_same_side_deadhold,0.0
+frac_beat_same_side_deadhold,0.0
+gap_mean,0.0
+gap_median,0.0
+n_long,45.0
+gap_mean_long,0.0
+frac_beat_long,0.0
+n_short,25.0
+gap_mean_short,0.0
+frac_beat_short,0.0

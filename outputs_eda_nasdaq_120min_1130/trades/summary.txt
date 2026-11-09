@@ -1,0 +1,9 @@
+spells=23895  agents=148
+entry at 11:35: 23285 (97.4%)
+last in-position bar inside 11:35-13:30: 23895
+price-move bars with position on, outside that window: 0
+hold minutes (entry → last bar still on): median 115  p10 115  p90 115
+flat observed same calendar day: 23645
+flat observed >2h later (price had frozen): 875
+of those, gap bar with nonzero PnL: 0
+median |gap| points on delayed reveals: 6.25

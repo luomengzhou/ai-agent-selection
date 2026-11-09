@@ -1,0 +1,4 @@
+earliest_active	08CED1F7986BFCDF
+latest_active	076D70315C3E4A8A
+high_zero_share	50C24DD5FA6B7733
+high_final_pnl	298CE0D14FB83798

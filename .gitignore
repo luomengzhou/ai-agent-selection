@@ -1,0 +1,28 @@
+# Local env / secrets
+.venv/
+venv/
+.env
+.env.*
+*.pem
+*.key
+
+# Raw agent datasets (too large; keep local only)
+Mini_*/
+Nasdaq_*/
+*.parquet
+
+# Local run logs
+outputs_eda_nasdaq_run.log
+outputs_eda_light_run.log
+
+# Local scratch notes (math / TS cheatsheet; keep on machine only)
+docs/LOCAL_MATH_TS_NOTES.md
+
+# OS / editor
+.DS_Store
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Unrelated / empty noise
+mnist_pytorch_outputs_full_run.log
